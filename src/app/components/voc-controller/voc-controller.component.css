@@ -1,0 +1,20 @@
+.myform {
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.mybutton {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.btn-primary:focus,
+.btn-primary:active{
+    box-shadow:none !important;
+    outline:0px !important;
+}
+
+mat-form-field{
+  width: 300px;
+}

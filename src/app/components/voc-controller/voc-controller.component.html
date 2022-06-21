@@ -1,0 +1,29 @@
+<section class="voc-form">
+  <!-- local reference #f gives access to form object -->
+  <form fxLayout="column" fxLayoutAlign="center center" #f="ngForm" (ngSubmit)="handleSubmit(f)">
+    <mat-form-field>
+      <mat-label>Переводите на немецкий</mat-label>
+      <input type="text"
+            matInput
+            placeholder="Немецкое слово"
+            aria-label="ru"
+            aria-describedby="basic-addon1"
+            autocomplete="off"
+            [value]="currentWord"
+      >
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Ваш перевод</mat-label>
+      <input type="text"
+            matInput
+            placeholder="Перевод"
+            aria-label="de"
+            autocomplete="off"
+            aria-describedby="basic-addon2"
+            [(ngModel)]="userTranslation"
+            [ngModelOptions]="{standalone: true}"
+      >
+    </mat-form-field>
+    <button type="submit" mat-raised-button color="primary">Submit</button>
+  </form>
+</section>
