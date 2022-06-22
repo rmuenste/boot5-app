@@ -1,0 +1,37 @@
+<section class="login-form">
+  <!-- fxLayout="column" sets the flow of the child elements to column -->
+  <!-- fxLayoutAlign="center center" => the first value sets the align for the main axis
+  and the second value for the cross axis
+  Here we set both values to "center"
+  -->
+  <form
+    fxLayout="column"
+    fxLayoutAlign="center center"
+    fxLayoutGap="10px"
+    [formGroup]="loginForm"
+    (ngSubmit)="onSubmit()"
+  >
+  <mat-form-field>
+    <input
+      type="email"
+      autocomplete="username"
+      matInput
+      placeholder="Your email"
+      formControlName="email"
+    >
+  </mat-form-field>
+  <mat-form-field>
+    <input
+      type="password"
+      autocomplete="current-password"
+      matInput
+      placeholder="Your password"
+      formControlName="password"
+    >
+    <mat-hint>Please enter your password</mat-hint>
+    <mat-error>Password is missing.</mat-error>
+  </mat-form-field>
+  <button
+    type="submit" mat-raised-button color="primary" [disabled]="loginForm.invalid">Submit</button>
+  </form>
+</section>
