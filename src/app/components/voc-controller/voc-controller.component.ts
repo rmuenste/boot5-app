@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { DataServiceService } from 'src/app/data/data-service.service';
 import { vocGerRu } from 'src/app/data/mydata';
+import { simpleShuffle } from 'src/app/modules/shuffle';
 
 @Component({
   selector: 'app-voc-controller',
@@ -13,14 +15,25 @@ export class VocControllerComponent implements OnInit {
   currentId: number = 0;
   currentWord: string = "";
   userTranslation: string = "";
-  constructor() {
+  constructor(private vocDataService: DataServiceService) {
     this.vocData = [...vocGerRu];
     this.currentWord = this.vocData[this.currentId].Russian;
    }
 
   ngOnInit(): void {
-    this.vocData = [...vocGerRu];
-    this.currentWord = this.vocData[this.currentId].Russian;
+
+    this.vocDataService.getWords().subscribe({
+      next: (res) => {
+        res = simpleShuffle(res);
+        this.vocData = [...res];
+        this.currentWord = this.vocData[this.currentId].Russian;
+        console.log(this.vocData);
+      },
+      error: (e) => console.log(e),
+      complete: () => {
+        console.log("getWords completed");
+      }
+    });
   }
 
   //checkUserSolution(userSol: string) {

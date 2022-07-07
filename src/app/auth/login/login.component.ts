@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit {
       next: (res) => {
         this.authService.authSuccessful();
         let resObj = {...res};
-        console.log( `Respone = ${JSON.stringify(resObj)}`);
+        console.log( `Response = ${JSON.stringify(resObj)}`);
         console.log( `User id = ${resObj.user}`);
       },
       error: (e) => console.log(e),
