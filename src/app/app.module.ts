@@ -10,6 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
+import { MatSelectModule } from '@angular/material/select';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -23,6 +24,9 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { HttpClientModule } from '@angular/common/http';
 import { HeaderComponent } from './components/navigation/header/header.component';
 import { SidenavListComponent } from './components/navigation/sidenav-list/sidenav-list.component';
+import { LandingComponent } from './components/landing/landing.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { GameBarComponent } from './components/navigation/game-bar/game-bar.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +35,10 @@ import { SidenavListComponent } from './components/navigation/sidenav-list/siden
     LoginComponent,
     SignupComponent,
     HeaderComponent,
-    SidenavListComponent
+    SidenavListComponent,
+    LandingComponent,
+    FooterComponent,
+    GameBarComponent
   ],
   imports: [
     BrowserModule,
@@ -44,6 +51,7 @@ import { SidenavListComponent } from './components/navigation/sidenav-list/siden
     FlexLayoutModule,
     MatToolbarModule,
     MatSidenavModule,
+    MatSelectModule,
     MatListModule,
     HttpClientModule,
     MatIconModule,

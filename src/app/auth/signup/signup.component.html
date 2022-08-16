@@ -1,5 +1,6 @@
 <section class="signup-form">
   <!-- #f is a local reference to the form for the html template -->
+<div class="form-wrapper">
 <form fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px" action="" #f="ngForm" (ngSubmit)="onSubmit(f)">
   <mat-form-field>
     <input type="email"
@@ -28,4 +29,5 @@
   </mat-form-field>
   <button type="submit" mat-raised-button color="primary" [disabled]="f.invalid">Submit</button>
 </form>
+</div>
 </section>

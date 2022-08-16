@@ -1,5 +1,14 @@
 .myform {
-  margin-top: 20px;
+  margin-top: 25px;
+}
+
+.form-wrap {
+  font-size: 1px;
+}
+
+mat-form-field.langSelect {
+  font-size: 12px;
+  width: 100px;
 }
 
 .mybutton {
@@ -11,6 +20,27 @@
 .btn-primary:active{
     box-shadow:none !important;
     outline:0px !important;
+}
+
+.navigation-items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+  color: white
+}
+
+#start-link {
+  cursor: pointer;
+}
+
+#start-link:hover,
+#start-link:active
+{
+  color: lightgray;
 }
 
 mat-form-field{

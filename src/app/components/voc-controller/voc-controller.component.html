@@ -1,4 +1,32 @@
 <section class="voc-form">
+<mat-toolbar color="accent">
+<div class="form-wrap">
+<mat-form-field appearance="fill" class="langSelect">
+  <mat-label>From</mat-label>
+  <mat-select>
+    <mat-option *ngFor="let lang of langFrom" [value]="lang.value">
+      {{lang.viewValue}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+<mat-form-field appearance="fill" class="langSelect">
+  <mat-label>To</mat-label>
+  <mat-select>
+    <mat-option *ngFor="let lang of langTo" [value]="lang.value">
+      {{lang.viewValue}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+</div>
+  <!-- fxHide.xs will hide the element on very small screens -->
+  <div fxFlex fxLayout fxLayoutAlign="flex-end" fxHide.xs>
+    <ul fxLayout fxLayoutGap="10px" class="navigation-items">
+      <li><a id="start-link" (click)="onStartTrainer()">Start</a></li>
+    </ul>
+  </div>
+</mat-toolbar>
+
+  <!-- The main form for the vocabulary Trainer -->
   <!-- local reference #f gives access to form object -->
   <form fxLayout="column" class="myform" fxLayoutAlign="center center" #f="ngForm" (ngSubmit)="handleSubmit(f)">
     <mat-form-field>
@@ -9,6 +37,7 @@
             aria-label="ru"
             aria-describedby="basic-addon1"
             autocomplete="off"
+            [disabled]="!trainerRunning"
             [value]="currentWord"
       >
     </mat-form-field>
@@ -21,9 +50,20 @@
             autocomplete="off"
             aria-describedby="basic-addon2"
             [(ngModel)]="userTranslation"
+            [disabled]="!trainerRunning"
             [ngModelOptions]="{standalone: true}"
       >
     </mat-form-field>
     <button type="submit" mat-raised-button color="primary">Submit</button>
   </form>
+  <!--
+  <div class="example-label">Basic</div>
+  <div class="example-button-row">
+    <button mat-raised-button color="accent" (click)="onLogResult()">Log</button>
+  </div>
+  -->
+  <!-- The result view for the  vocabulary Trainer -->
+  <div *ngIf="showFinalResult">
+    You have correctly remembered {{correctWords}} of {{totalWords}} words.
+  </div>
 </section>

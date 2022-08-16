@@ -1,0 +1,39 @@
+/*
+You can add global styles to this file, and also import other style files
+ --primary-bg-color: #c2185b;
+
+ 500: #8bc34a,
+*/
+
+.myfooter {
+background-color: #3f51b5;
+position: fixed;
+width: 100%;
+bottom: 0;
+}
+
+.footer-container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  }
+
+  .footer-item1 {
+  flex-grow: 1;
+  text-align: left;
+  }
+  .footer-item2 {
+  flex-grow: 1;
+  text-align: center;
+  justify-content: center;
+  }
+  .footer-item3 {
+  flex-grow: 1;
+  text-align: right;
+  }
+
+  .myspan {
+    align-self: center;
+  }

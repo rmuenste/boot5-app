@@ -24,3 +24,13 @@ a:active
 .img-wrapper {
   padding-top: 7px;
 }
+
+#logout-link {
+  cursor: pointer;
+}
+
+#logout-link:hover,
+#logout-link:active
+{
+  color: lightgray;
+}
