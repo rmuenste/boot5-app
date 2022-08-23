@@ -33,12 +33,14 @@ a {
   color: white
 }
 
-#start-link {
+#start-link, #stop-link {
   cursor: pointer;
 }
 
 #start-link:hover,
-#start-link:active
+#start-link:active,
+#stop-link:hover,
+#stop-link:active
 {
   color: lightgray;
 }

@@ -24,16 +24,16 @@ interface LangTo {
 })
 export class VocControllerComponent implements OnInit {
 
-  vocData = [];
-  currentId: number = 0;
-  totalWords: number = -1;
-  counter: number = 1;
-  correctWords: number = 0;
-  mongoId: string = "";
-  currentWord: string = "";
-  userTranslation: string = "";
-  trainerRunning = false;
-  showFinalResult = false;
+  vocData = [];                                 // The data array used in the training
+  currentId: number = 0;                        // The index of the current word
+  totalWords: number = -1;                      // The total number of words in the training (array length)
+  counter: number = 1;                          // The word counter for the current training
+  correctWords: number = 0;                     // The number of correct words
+  mongoId: string = "";                         // The id in the mongo data base
+  currentWord: string = "";                     // The current word as string
+  userTranslation: string = "";                 // The user translation of the current word
+  trainerRunning = false;                       // flag: is the trainer running
+  showFinalResult = false;                      // flag: should we show the result screen
 
   langFrom: LangFrom[] = [
     {value: 'russian', viewValue: 'russian'},
@@ -59,6 +59,7 @@ export class VocControllerComponent implements OnInit {
       next: (res) => {
         res = simpleShuffle(res);
         this.vocData = [...res];
+        this.currentId = 0;
         this.currentWord = this.vocData[this.currentId].Russian;
         this.mongoId = this.vocData[this.currentId]._id;
         this.totalWords = this.vocData.length;
@@ -66,6 +67,7 @@ export class VocControllerComponent implements OnInit {
         this.correctWords = 0;
         this.trainerRunning = false;
         this.showFinalResult = false;
+        this.vocData.forEach( (value) => value.success = false);
         console.log(`id: ${this.mongoId}`);
         console.log(this.vocData);
       },
@@ -98,6 +100,7 @@ export class VocControllerComponent implements OnInit {
     if (this.userTranslation === gerTranslation) {
       console.log("Correct translation");
       // all ok and advance
+      this.vocData[this.currentId].success = true;
       if(this.counter === this.totalWords) {
         this.showFinalResult = true;
         this.trainerRunning = false;
@@ -116,6 +119,7 @@ export class VocControllerComponent implements OnInit {
 
     } else {
       console.log("Wrong translation");
+      this.vocData[this.currentId].success = false;
       if(this.counter === this.totalWords) {
         this.showFinalResult = true;
         this.trainerRunning = false;
@@ -182,6 +186,24 @@ export class VocControllerComponent implements OnInit {
 //      }
 //    });
   }
+  //===========================================================================================
+  // resetValues
+  //===========================================================================================
+  // Resets the state of the component to the inital state
+  resetValues() {
+    if(this.showFinalResult)
+      this.showFinalResult = !this.showFinalResult;
+
+    this.currentId = 0;
+    this.currentWord = this.vocData[this.currentId].Russian;
+    this.mongoId = this.vocData[this.currentId]._id;
+    this.totalWords = this.vocData.length;
+    this.counter = 1;
+    this.correctWords = 0;
+
+    this.vocData.forEach( (value) => value.success = false);
+
+  }
 
   //===========================================================================================
   // onStartTrainer
@@ -189,7 +211,17 @@ export class VocControllerComponent implements OnInit {
   // Starts the trainer and sets the running training variable to true
   onStartTrainer() {
     this.trainerRunning = true;
+    this.resetValues();
     console.log("Trainer is now running!");
+  }
+
+  //===========================================================================================
+  // onStopTrainer
+  //===========================================================================================
+  // Stops the trainer and resets the application state
+  onStopTrainer() {
+    this.trainerRunning = false;
+    this.resetValues();
   }
 
 }
