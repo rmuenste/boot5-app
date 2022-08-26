@@ -27,6 +27,8 @@ import { SidenavListComponent } from './components/navigation/sidenav-list/siden
 import { LandingComponent } from './components/landing/landing.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { GameBarComponent } from './components/navigation/game-bar/game-bar.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { StopTrainerComponent } from './components/voc-controller/stop-trainer.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +40,8 @@ import { GameBarComponent } from './components/navigation/game-bar/game-bar.comp
     SidenavListComponent,
     LandingComponent,
     FooterComponent,
-    GameBarComponent
+    GameBarComponent,
+    StopTrainerComponent
   ],
   imports: [
     BrowserModule,
@@ -52,12 +55,14 @@ import { GameBarComponent } from './components/navigation/game-bar/game-bar.comp
     MatToolbarModule,
     MatSidenavModule,
     MatSelectModule,
+    MatDialogModule,
     MatListModule,
     HttpClientModule,
     MatIconModule,
     BrowserAnimationsModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [StopTrainerComponent]
 })
 export class AppModule { }

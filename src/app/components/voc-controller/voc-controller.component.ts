@@ -5,6 +5,8 @@ import { LogService } from 'src/app/data/log.service';
 import { LogData } from 'src/app/data/logData';
 import { vocGerRu } from 'src/app/data/mydata';
 import { simpleShuffle } from 'src/app/modules/shuffle';
+import { MatDialog } from '@angular/material/dialog';
+import { StopTrainerComponent } from './stop-trainer.component';
 
 interface LangFrom {
   value: string;
@@ -44,7 +46,10 @@ export class VocControllerComponent implements OnInit {
   ];
 
 
-  constructor(private vocDataService: DataServiceService, private logDataService: LogService) {
+  constructor(private vocDataService: DataServiceService,
+              private logDataService: LogService,
+              private dialog: MatDialog
+              ) {
     this.vocData = [...vocGerRu];
     this.currentWord = this.vocData[this.currentId].Russian;
    }
@@ -220,6 +225,7 @@ export class VocControllerComponent implements OnInit {
   //===========================================================================================
   // Stops the trainer and resets the application state
   onStopTrainer() {
+    this.dialog.open(StopTrainerComponent);
     this.trainerRunning = false;
     this.resetValues();
   }
