@@ -36,6 +36,9 @@ export class VocControllerComponent implements OnInit {
   userTranslation: string = "";                 // The user translation of the current word
   trainerRunning = false;                       // flag: is the trainer running
   showFinalResult = false;                      // flag: should we show the result screen
+  showingUserFeedback = false;                  // flag: feedback for user solution on/off
+  textColor = 'black';
+  buttonText = 'Submit';
 
   langFrom: LangFrom[] = [
     {value: 'russian', viewValue: 'russian'},
@@ -45,6 +48,7 @@ export class VocControllerComponent implements OnInit {
     {value: 'german', viewValue: 'german'},
   ];
 
+// [ngStyle]="{'color': vocData[currentId].success ? 'green' : 'red'}"
 
   constructor(private vocDataService: DataServiceService,
               private logDataService: LogService,
@@ -104,14 +108,18 @@ export class VocControllerComponent implements OnInit {
     console.log(`User translation: ${this.userTranslation}`);
     if (this.userTranslation === gerTranslation) {
       console.log("Correct translation");
+
+      this.textColor = 'green';
+      this.userTranslation = this.userTranslation + " \u{2713}";
       // all ok and advance
       this.vocData[this.currentId].success = true;
+
+      // Check if we have completed all words
       if(this.counter === this.totalWords) {
         this.showFinalResult = true;
         this.trainerRunning = false;
         console.log("All words done!")
       }
-      this.advanceWord();
       this.correctWords = this.correctWords + 1;
       console.log(`Current id: ${this.currentId}`);
       console.log(`Current word: ${this.currentWord}`);
@@ -125,12 +133,32 @@ export class VocControllerComponent implements OnInit {
     } else {
       console.log("Wrong translation");
       this.vocData[this.currentId].success = false;
+      this.textColor = 'red';
+      this.userTranslation = this.userTranslation + " \u{2718}";
+
       if(this.counter === this.totalWords) {
         this.showFinalResult = true;
         this.trainerRunning = false;
         console.log("All words done!")
       }
-      this.advanceWord();
+    }
+
+    // We know should give the user a feeback
+    this.showingUserFeedback = true;
+    this.buttonText = 'Continue';
+  }
+  //===========================================================================================
+  // setFeedbackStyle()
+  //===========================================================================================
+  // Here we set the feedbackStyle here
+  setFeedbackStyle() {
+    // Set the user feedback style
+    if (this.showingUserFeedback) {
+
+    }
+    // set the normal style
+    else {
+
     }
   }
 
@@ -141,7 +169,15 @@ export class VocControllerComponent implements OnInit {
   handleSubmit(form: NgForm) {
     //console.log(form.value.userSolution);
     //this.checkUserSolution(form.value.userSolution);
-    this.checkUserSolution();
+    if (this.showingUserFeedback === false) {
+      this.checkUserSolution();
+    }
+    else {
+      this.advanceWord();
+      this.showingUserFeedback = false;
+      this.textColor = 'black';
+      this.buttonText = 'Submit';
+    }
   }
 
   onLogResult() {
@@ -205,6 +241,8 @@ export class VocControllerComponent implements OnInit {
     this.totalWords = this.vocData.length;
     this.counter = 1;
     this.correctWords = 0;
+    this.textColor = 'black';
+    this.buttonText = 'Submit';
 
     this.vocData.forEach( (value) => value.success = false);
 

@@ -55,9 +55,14 @@
             [(ngModel)]="userTranslation"
             [disabled]="!trainerRunning"
             [ngModelOptions]="{standalone: true}"
+            [ngStyle]="{'color': textColor}"
       >
     </mat-form-field>
-    <button type="submit" mat-raised-button color="primary">Submit</button>
+    <button type="submit"
+            mat-raised-button
+            color="primary"
+            [disabled]="!trainerRunning"
+            >{{buttonText}}</button>
   </form>
   <!--
   <div class="example-label">Basic</div>
