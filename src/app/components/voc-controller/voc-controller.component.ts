@@ -7,7 +7,7 @@ import { vocGerRu } from 'src/app/data/mydata';
 import { simpleShuffle } from 'src/app/modules/shuffle';
 import { MatDialog } from '@angular/material/dialog';
 import { StopTrainerComponent } from './stop-trainer.component';
-
+import { MatDialogRef } from '@angular/material/dialog';
 interface LangFrom {
   value: string;
   viewValue: string;
@@ -233,7 +233,7 @@ export class VocControllerComponent implements OnInit {
   // Resets the state of the component to the inital state
   resetValues() {
     if(this.showFinalResult)
-      this.showFinalResult = !this.showFinalResult;
+      this.showFinalResult = false;
 
     this.currentId = 0;
     this.currentWord = this.vocData[this.currentId].Russian;
@@ -243,8 +243,10 @@ export class VocControllerComponent implements OnInit {
     this.correctWords = 0;
     this.textColor = 'black';
     this.buttonText = 'Submit';
+    this.userTranslation = "";
 
     this.vocData.forEach( (value) => value.success = false);
+    this.trainerRunning = false;
 
   }
 
@@ -253,8 +255,8 @@ export class VocControllerComponent implements OnInit {
   //===========================================================================================
   // Starts the trainer and sets the running training variable to true
   onStartTrainer() {
-    this.trainerRunning = true;
     this.resetValues();
+    this.trainerRunning = true;
     console.log("Trainer is now running!");
   }
 
@@ -263,9 +265,13 @@ export class VocControllerComponent implements OnInit {
   //===========================================================================================
   // Stops the trainer and resets the application state
   onStopTrainer() {
-    this.dialog.open(StopTrainerComponent);
-    this.trainerRunning = false;
-    this.resetValues();
+    const dialogRef = this.dialog.open(StopTrainerComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result) {
+        this.resetValues();
+      }
+    })
   }
 
 }
