@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { DataServiceService } from 'src/app/data/data-service.service';
 import { LogService } from 'src/app/data/log.service';
-import { LogData } from 'src/app/data/logData';
+import { LogData, LogArray } from 'src/app/data/logData';
 import { vocGerRu } from 'src/app/data/mydata';
-import { simpleShuffle } from 'src/app/modules/shuffle';
+import { simpleShuffle, permutationShuffe } from 'src/app/modules/shuffle';
 import { MatDialog } from '@angular/material/dialog';
 import { StopTrainerComponent } from './stop-trainer.component';
 import { MatDialogRef } from '@angular/material/dialog';
@@ -27,6 +27,8 @@ interface LangTo {
 export class VocControllerComponent implements OnInit {
 
   vocData = [];                                 // The data array used in the training
+  origData = [];                                // The data array used in the training
+  permutation = [];                             // The data array used in the training
   currentId: number = 0;                        // The index of the current word
   totalWords: number = -1;                      // The total number of words in the training (array length)
   counter: number = 1;                          // The word counter for the current training
@@ -66,8 +68,11 @@ export class VocControllerComponent implements OnInit {
 
     this.vocDataService.getWords().subscribe({
       next: (res) => {
-        res = simpleShuffle(res);
-        this.vocData = [...res];
+        this.origData = [...res];
+
+        [this.vocData, this.permutation] = permutationShuffe(res);
+//        res = simpleShuffle(res);
+//        this.vocData = [...res];
         this.currentId = 0;
         this.currentWord = this.vocData[this.currentId].Russian;
         this.mongoId = this.vocData[this.currentId]._id;
@@ -113,33 +118,39 @@ export class VocControllerComponent implements OnInit {
       this.userTranslation = this.userTranslation + " \u{2713}";
       // all ok and advance
       this.vocData[this.currentId].success = true;
+      this.vocData[this.currentId].repetitions = this.vocData[this.currentId].repetitions + 1;
+      this.vocData[this.currentId].correct = this.vocData[this.currentId].correct + 1;
+
+      this.correctWords = this.correctWords + 1;
+      console.log(`Current id: ${this.currentId}`);
+      console.log(`Current word: ${this.currentWord}`);
 
       // Check if we have completed all words
       if(this.counter === this.totalWords) {
         this.showFinalResult = true;
         this.trainerRunning = false;
-        console.log("All words done!")
+        console.log("All words done! Logging result")
+        this.onLogResult();
       }
-      this.correctWords = this.correctWords + 1;
-      console.log(`Current id: ${this.currentId}`);
-      console.log(`Current word: ${this.currentWord}`);
+
       // Log the result to the data base for statistics
 //      let logData: LogData = {
 //        wordId: this.mongoId,
 //        result: true
 //      };
-//      this.onLogResult2(logData);
 
     } else {
       console.log("Wrong translation");
       this.vocData[this.currentId].success = false;
       this.textColor = 'red';
       this.userTranslation = this.userTranslation + " \u{2718}";
+      this.vocData[this.currentId].repetitions = this.vocData[this.currentId].repetitions + 1;
 
       if(this.counter === this.totalWords) {
         this.showFinalResult = true;
         this.trainerRunning = false;
-        console.log("All words done!")
+        console.log("All words done! Logging result")
+        this.onLogResult();
       }
     }
 
@@ -187,7 +198,11 @@ export class VocControllerComponent implements OnInit {
       result: true
     }
 
-    this.logDataService.logResult(logData).subscribe({
+    const logArr: LogArray = {
+      wordStatistics: this.vocData
+    }
+
+    this.logDataService.logArrayResult(logArr).subscribe({
       next: (res) => {
         console.log(res);
       },

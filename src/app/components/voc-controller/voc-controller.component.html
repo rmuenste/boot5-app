@@ -64,12 +64,10 @@
             [disabled]="!trainerRunning"
             >{{buttonText}}</button>
   </form>
-  <!--
   <div class="example-label">Basic</div>
   <div class="example-button-row">
     <button mat-raised-button color="accent" (click)="onLogResult()">Log</button>
   </div>
-  -->
   <!-- The result view for the  vocabulary Trainer -->
   <div *ngIf="showFinalResult">
     You have correctly remembered {{correctWords}} of {{totalWords}} words.
