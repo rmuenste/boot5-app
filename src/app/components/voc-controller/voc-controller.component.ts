@@ -42,6 +42,10 @@ export class VocControllerComponent implements OnInit {
   textColor = 'black';
   buttonText = 'Submit';
 
+  wordLists = [];
+  wordList = [];
+  wordListName = "A1";
+
   langFrom: LangFrom[] = [
     {value: 'russian', viewValue: 'russian'},
   ];
@@ -90,6 +94,19 @@ export class VocControllerComponent implements OnInit {
         console.log("getWords completed");
       }
     });
+
+    this.vocDataService.getDictionaries().subscribe({
+      next: (res) => {
+        this.wordLists = [...res];
+        console.log(this.wordLists);
+      },
+      error: (e) => console.log(e),
+      complete: () => {
+        console.log("getDictionaries completed");
+      }
+    });
+
+
   }
 
   //===========================================================================================

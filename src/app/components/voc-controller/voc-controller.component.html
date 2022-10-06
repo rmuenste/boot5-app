@@ -18,6 +18,14 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
+    <mat-form-field appearance="fill" class="langSelect">
+      <mat-label>Dictionary</mat-label>
+      <mat-select>
+        <mat-option *ngFor="let wlist of wordLists" [value]="wordList">
+          {{wlist.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
     </div>
       <!-- fxHide.xs will hide the element on very small screens -->
       <div fxFlex fxLayout fxLayoutAlign="flex-end" fxHide.xs>

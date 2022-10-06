@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 
 const findAllUrl = "http://localhost:5001/api/voc/rugervocall/";
+const findDicts = "http://localhost:5001/api/voc/rugervocdicts/";
 
 const httpOptions = {
  withCredentials: true
@@ -18,6 +19,10 @@ export class DataServiceService {
 
   getWords(): Observable<any> {
     return this.http.get(findAllUrl, httpOptions);
+  }
+
+  getDictionaries(): Observable<any> {
+    return this.http.get(findDicts, httpOptions);
   }
 
 }
