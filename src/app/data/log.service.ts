@@ -27,6 +27,8 @@ export class LogService {
   logArrayResult(logArr: LogArray): Observable<any> {
 
     let sendData = {...logArr};
+    let text = JSON.stringify(logArr, null, '\t');
+    console.log(text);
     return this.http.post(logUrl, sendData, httpOptions);
   }
 

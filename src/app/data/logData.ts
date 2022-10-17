@@ -5,6 +5,7 @@ export interface LogData {
 
 export interface LogArray {
   wordStatistics: Array<any>;
+  dictId: string;
 }
 /*
 const userSchema = new Schema<User, UserModel>({

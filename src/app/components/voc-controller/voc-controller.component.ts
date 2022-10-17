@@ -216,7 +216,8 @@ export class VocControllerComponent implements OnInit {
     }
 
     const logArr: LogArray = {
-      wordStatistics: this.vocData
+      wordStatistics: this.vocData,
+      dictId: this.wordListName
     }
 
     this.logDataService.logArrayResult(logArr).subscribe({
