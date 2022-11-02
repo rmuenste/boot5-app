@@ -4,7 +4,7 @@
     <div class="form-wrap">
     <mat-form-field appearance="fill" class="langSelect">
       <mat-label>From</mat-label>
-      <mat-select>
+      <mat-select [(value)]="fromValue" [disabled]="this.trainerRunning">
         <mat-option *ngFor="let lang of langFrom" [value]="lang.value">
           {{lang.viewValue}}
         </mat-option>
@@ -12,7 +12,7 @@
     </mat-form-field>
     <mat-form-field appearance="fill" class="langSelect">
       <mat-label>To</mat-label>
-      <mat-select>
+      <mat-select [(value)]="toValue" [disabled]="this.trainerRunning">
         <mat-option *ngFor="let lang of langTo" [value]="lang.value">
           {{lang.viewValue}}
         </mat-option>
@@ -20,9 +20,9 @@
     </mat-form-field>
     <mat-form-field appearance="fill" class="langSelect">
       <mat-label>Dictionary</mat-label>
-      <mat-select>
-        <mat-option *ngFor="let wlist of wordLists" [value]="wordList">
-          {{wlist.name}}
+      <mat-select [(value)]="wordListName" (selectionChange)="onDictChange($event)" [disabled]="this.trainerRunning">
+        <mat-option *ngFor="let wlist of wordLists2" [value]="wlist">
+          {{wlist}}
         </mat-option>
       </mat-select>
     </mat-form-field>

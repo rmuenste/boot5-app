@@ -8,6 +8,7 @@ import { simpleShuffle, permutationShuffe } from 'src/app/modules/shuffle';
 import { MatDialog } from '@angular/material/dialog';
 import { StopTrainerComponent } from './stop-trainer.component';
 import { MatDialogRef } from '@angular/material/dialog';
+
 interface LangFrom {
   value: string;
   viewValue: string;
@@ -43,15 +44,20 @@ export class VocControllerComponent implements OnInit {
   buttonText = 'Submit';
 
   wordLists = [];
+  wordLists2 = ["A1", "A2", "A3"];
   wordList = [];
   wordListName = "A1";
+  fromValue = "russian";
+  toValue = "german";
 
   langFrom: LangFrom[] = [
     {value: 'russian', viewValue: 'russian'},
+    {value: 'german', viewValue: 'german'},
   ];
 
   langTo: LangTo[] = [
     {value: 'german', viewValue: 'german'},
+    {value: 'russian', viewValue: 'russian'},
   ];
 
 // [ngStyle]="{'color': vocData[currentId].success ? 'green' : 'red'}"
@@ -61,7 +67,38 @@ export class VocControllerComponent implements OnInit {
               private dialog: MatDialog
               ) {
     this.vocData = [...vocGerRu];
-    this.currentWord = this.vocData[this.currentId].Russian;
+    this.currentWord = this.vocData[this.currentId][this.fromValue];
+   }
+  onDictChange(ob): void {
+    console.log("Event: %o", ob);
+    console.log(`VAlue2: ${this.wordListName}`);
+  }
+
+  //===========================================================================================
+  // fetchWords
+  //===========================================================================================
+  // Here we get the words from the database
+  async fetchWords() {
+    console.log("Fetch words: %s", this.wordListName);
+    const words$ = this.vocDataService.getWords(this.wordListName);
+    words$.subscribe({
+      next: (res) => {
+        this.origData = [...res];
+
+        [this.vocData, this.permutation] = permutationShuffe(res);
+        this.vocData.forEach( (value) => value.success = false);
+        console.log(`id: ${this.mongoId}`);
+        console.log(this.vocData);
+      },
+      error: (e) => console.log(e),
+      complete: () => {
+      this.resetValues();
+      this.trainerRunning = true;
+      console.log("Trainer is now running!");
+      console.log("getWords completed");
+      }
+    });
+
    }
 
   //===========================================================================================
@@ -70,31 +107,29 @@ export class VocControllerComponent implements OnInit {
   // Here we initialize the component and load the word list
   ngOnInit(): void {
 
-    this.vocDataService.getWords().subscribe({
-      next: (res) => {
-        this.origData = [...res];
+//    this.vocDataService.getWords().subscribe({
+//      next: (res) => {
+//        this.origData = [...res];
+//
+//        [this.vocData, this.permutation] = permutationShuffe(res);
+//        this.currentId = 0;
+//        this.currentWord = this.vocData[this.currentId][this.fromValue];
+//        this.mongoId = this.vocData[this.currentId]._id;
+//        this.totalWords = this.vocData.length;
+//        this.counter = 1;
+//        this.correctWords = 0;
+//        this.vocData.forEach( (value) => value.success = false);
+//        console.log(`id: ${this.mongoId}`);
+//        console.log(this.vocData);
+//      },
+//      error: (e) => console.log(e),
+//      complete: () => {
+//        console.log("getWords completed");
+//      }
+//    });
 
-        [this.vocData, this.permutation] = permutationShuffe(res);
-//        res = simpleShuffle(res);
-//        this.vocData = [...res];
-        this.currentId = 0;
-        this.currentWord = this.vocData[this.currentId].Russian;
-        this.mongoId = this.vocData[this.currentId]._id;
-        this.totalWords = this.vocData.length;
-        this.counter = 1;
-        this.correctWords = 0;
-        this.trainerRunning = false;
-        this.showFinalResult = false;
-        this.vocData.forEach( (value) => value.success = false);
-        console.log(`id: ${this.mongoId}`);
-        console.log(this.vocData);
-      },
-      error: (e) => console.log(e),
-      complete: () => {
-        console.log("getWords completed");
-      }
-    });
-
+    this.trainerRunning = false;
+    this.showFinalResult = false;
     this.vocDataService.getDictionaries().subscribe({
       next: (res) => {
         this.wordLists = [...res];
@@ -115,7 +150,7 @@ export class VocControllerComponent implements OnInit {
   // We advance the state one word and check if we have reached the end of the word list
   advanceWord() {
     this.currentId = (this.currentId + 1) % this.vocData.length;
-    this.currentWord = this.vocData[this.currentId].Russian;
+    this.currentWord = this.vocData[this.currentId][this.fromValue];
     this.mongoId = this.vocData[this.currentId]._id;
     this.userTranslation = "";
     this.counter = this.counter + 1;
@@ -126,9 +161,10 @@ export class VocControllerComponent implements OnInit {
   //===========================================================================================
   // We check the user solution, give an according response and advance to the next word
   checkUserSolution() {
-    let gerTranslation = this.vocData[this.currentId].German;
+
+    let toTranslation = this.vocData[this.currentId][this.toValue];
     console.log(`User translation: ${this.userTranslation}`);
-    if (this.userTranslation === gerTranslation) {
+    if (this.userTranslation === toTranslation) {
       console.log("Correct translation");
 
       this.textColor = 'green';
@@ -269,7 +305,7 @@ export class VocControllerComponent implements OnInit {
       this.showFinalResult = false;
 
     this.currentId = 0;
-    this.currentWord = this.vocData[this.currentId].Russian;
+    this.currentWord = this.vocData[this.currentId][this.fromValue];
     this.mongoId = this.vocData[this.currentId]._id;
     this.totalWords = this.vocData.length;
     this.counter = 1;
@@ -288,9 +324,7 @@ export class VocControllerComponent implements OnInit {
   //===========================================================================================
   // Starts the trainer and sets the running training variable to true
   onStartTrainer() {
-    this.resetValues();
-    this.trainerRunning = true;
-    console.log("Trainer is now running!");
+    this.fetchWords();
   }
 
   //===========================================================================================

@@ -17,8 +17,10 @@ export class DataServiceService {
 
   constructor(private router: Router, private http: HttpClient) { }
 
-  getWords(): Observable<any> {
-    return this.http.get(findAllUrl, httpOptions);
+  getWords(dictId: string = "A1"): Observable<any> {
+    let queryParams = [dictId];
+    console.log(`Asking for ${dictId}`)
+    return this.http.get(findAllUrl, {params: {"dict":queryParams}, withCredentials: true});
   }
 
   getDictionaries(): Observable<any> {
