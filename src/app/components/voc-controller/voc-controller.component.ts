@@ -67,11 +67,12 @@ export class VocControllerComponent implements OnInit {
               private dialog: MatDialog
               ) {
     this.vocData = [...vocGerRu];
-    this.currentWord = this.vocData[this.currentId][this.fromValue];
+    this.currentWord = "";
    }
   onDictChange(ob): void {
     console.log("Event: %o", ob);
-    console.log(`VAlue2: ${this.wordListName}`);
+    //console.log(`VAlue2: ${this.wordListName}`);
+    console.log(`VAlue Dict: ${ob.value.name}`);
   }
 
   //===========================================================================================
@@ -128,6 +129,10 @@ export class VocControllerComponent implements OnInit {
 //      }
 //    });
 
+    if (this.vocData.length == 0) {
+      let arr = [''];
+      this.vocData = [...arr];
+    }
     this.trainerRunning = false;
     this.showFinalResult = false;
     this.vocDataService.getDictionaries().subscribe({
@@ -138,6 +143,10 @@ export class VocControllerComponent implements OnInit {
       error: (e) => console.log(e),
       complete: () => {
         console.log("getDictionaries completed");
+        if(this.wordLists.length > 0)
+          this.wordListName = this.wordLists[0];
+        else
+          this.wordListName = "A1";
       }
     });
 

@@ -21,8 +21,8 @@
     <mat-form-field appearance="fill" class="langSelect">
       <mat-label>Dictionary</mat-label>
       <mat-select [(value)]="wordListName" (selectionChange)="onDictChange($event)" [disabled]="this.trainerRunning">
-        <mat-option *ngFor="let wlist of wordLists2" [value]="wlist">
-          {{wlist}}
+        <mat-option *ngFor="let wlist of wordLists" [value]="wlist">
+          {{wlist.name}}
         </mat-option>
       </mat-select>
     </mat-form-field>
