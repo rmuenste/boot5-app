@@ -7,6 +7,11 @@ export interface LogArray {
   wordStatistics: Array<any>;
   dictId: string;
 }
+
+export interface dictionaryId {
+  _id: string;
+  name: string;
+}
 /*
 const userSchema = new Schema<User, UserModel>({
   email: {

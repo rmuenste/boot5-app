@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { DataServiceService } from 'src/app/data/data-service.service';
 import { LogService } from 'src/app/data/log.service';
-import { LogData, LogArray } from 'src/app/data/logData';
+import { LogData, LogArray, dictionaryId } from 'src/app/data/logData';
 import { vocGerRu } from 'src/app/data/mydata';
 import { simpleShuffle, permutationShuffe } from 'src/app/modules/shuffle';
 import { MatDialog } from '@angular/material/dialog';
@@ -46,7 +46,7 @@ export class VocControllerComponent implements OnInit {
   wordLists = [];
   wordLists2 = ["A1", "A2", "A3"];
   wordList = [];
-  wordListName = "A1";
+  wordListName : dictionaryId = {_id: "1", name: "A1"};
   fromValue = "russian";
   toValue = "german";
 
@@ -146,7 +146,7 @@ export class VocControllerComponent implements OnInit {
         if(this.wordLists.length > 0)
           this.wordListName = this.wordLists[0];
         else
-          this.wordListName = "A1";
+          this.wordListName = {_id: "1", name: "A1"};
       }
     });
 
@@ -262,7 +262,7 @@ export class VocControllerComponent implements OnInit {
 
     const logArr: LogArray = {
       wordStatistics: this.vocData,
-      dictId: this.wordListName
+      dictId: this.wordListName.name
     }
 
     this.logDataService.logArrayResult(logArr).subscribe({
